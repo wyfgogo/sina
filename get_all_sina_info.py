@@ -68,20 +68,20 @@ def get_sheep():
             if item.get("id") > idList[0]:
                 # 收到的每条消息进行处理
                 message = parse_message(item.get("user").get("screen_name")+'\\\n'+'\\\n'+item.get("text"))
-                # 字数小于5个字的描述,表示超级羊毛，0元购
-                text_raw = item.get("text_raw").split("http")[0]
-                if len(text_raw) < 5:
-                    send_message(message, True)
+                # 字数小于5个字的描述,表示超级羊毛，0元购 没用
+                #text_raw = item.get("text_raw").split("http")[0]
+                # if len(text_raw) < 5:
+                #     send_message(message, True)
                 # 带有某关键字和关键博主 +@所有人
                 if len(keywords) == 0:
                     if  item.get("user").get("screen_name") in screen_name:
-                        send_message(message, True)
+                        send_message(message, False)
                     else:
                         send_message(message,False)
                 else:
                     for word in keywords:
                         if item.get("user").get("screen_name") in screen_name and word in message:
-                            send_message(message, True)
+                            send_message(message, False)
                             break
                     send_message(message, False)
             else:
