@@ -109,6 +109,6 @@ def dojob():
     #创建调度器：BlockingScheduler
     scheduler = BlockingScheduler()
     #添加任务,时间间隔2S
-    scheduler.add_job(get_sheep, 'interval', seconds=2)
+    scheduler.add_job(get_sheep, 'interval', seconds=2,max_instances=5)
     scheduler.start()
 dojob()
