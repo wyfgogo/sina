@@ -1,32 +1,16 @@
-import os
-import yaml
+import json
 
 
-#读取extract文件
-def read_extract_file(key):
-    with open(
-        os.getcwd() + "/idlist.yml", encoding="utf-8"
-    ) as f:  # os.getcwd 打开项目根路径
-        value = yaml.load(f.read(),Loader=yaml.FullLoader) # 加载yaml文件的内容
-        return value[key]
+#覆盖json文件写入
+def write_json(data):
+    with open('./id.json', 'w', encoding='utf-8') as fp:
+        json.dump(data, fp, ensure_ascii=False)
+
+#读取json文件
+def read_json():
+    return json.load(open('id.json', 'r', encoding="utf-8"))
 
 
-# 写入yaml文件
-def write_yaml(data):
-    with open(
-        os.getcwd() + "/idlist.yml",
-        encoding="utf-8",
-        mode="a",
-    ) as f:  # a是追加的方式写入
-        [f.write("{}: {}\n".format(key, data[key])) for key in data]
 
-# 清空yaml文件
-def clear_yaml():
-    with open(
-        os.getcwd() + "/idlist.yml",
-        encoding="utf-8",
-        mode="w",
-    ) as f:  # w 写入
-        f.truncate()
 
 
