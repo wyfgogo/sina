@@ -10,7 +10,3 @@ def write_json(data):
 def read_json():
     return json.load(open('id.json', 'r', encoding="utf-8"))
 
-
-
-
-

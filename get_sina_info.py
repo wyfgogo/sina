@@ -23,9 +23,10 @@ uid_list = [
 base_url = "https://weibo.com/ajax/statuses/mymblog?uid={}&page=1&feature=0"
 keywords = {
     #"19157707002": ["洗衣机","电视机","电冰箱"],
-    "13210745239": ["卫生巾"],
-    "17751793119": ["牛肉干"],
-    #"17816874619": ["显卡"],
+    #"13210745239": ["卫生巾"],#凯乐
+    "17751793119": ["牛肉干"], #淑环
+    #"17816874619": ["显卡"], #洛哥
+    #"15757176965":["牛奶"] #严鸽
 }
 #["瑞幸"] 关键字
 header = {
@@ -75,7 +76,6 @@ def parse_message(message):
 
 def get_sheep():
     """获得羊毛信息并发钉钉通知"""
-    phone_list = []
     for uid in uid_list:
         url = base_url.format(uid)
         res = requests.get(url, headers=header).json()
@@ -102,16 +102,21 @@ def get_sheep():
                         message = parse_message(item.get("user").get("screen_name")+'\\\n'+'\\\n'+item.get("text")+'\\\n'+"![]"+"("+pic+")")
                     if len(keywords) == 0:
                         send_message(message,None)
-                    for key in keywords:
-                        # 如果关键字在博主发的消息和链接的文字中含有,就发送请求
-                        keylist = keywords[key]
-                        for word in keylist:
-                            if item.get("url_struct") != None:
-                                if word in str(str(message)+str(item["url_struct"][0]["url_title"])):
-                                    phone_list.append(key)
-                                    message = message + "@"+key
-                                    send_message(message,phone_list)
-                    send_message(message,None)
+                    if len(keywords) != 0:
+                        n = 1
+                        for key in keywords:
+                            # 如果关键字在博主发的消息和链接的文字中含有,就发送请求
+                            keylist = keywords[key]
+                            for word in keylist:
+                                if item.get("url_struct") != None:
+                                    if word in str(str(message)+str(item["url_struct"][0]["url_title"])):
+                                        phone_list = []
+                                        phone_list.append(key)
+                                        message = message + "@"+key
+                                        send_message(message,phone_list)
+                                        n = 2
+                        if n == 1:
+                            send_message(message,None)
                 if item["id"] == id_json[uid]:
                     break
         # 获取到本次请求最大的id，最新的一条存到本地
